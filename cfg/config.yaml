@@ -1,0 +1,40 @@
+defaults:
+  - _self_
+  - problem: bpp_offline_aco
+  - llm_client: openai
+  - override hydra/output: local
+
+hydra:
+  job:
+    name: ${problem.problem_name}-${problem.problem_type}
+    chdir: True
+
+# The chosen algorithm [mcts_ahd,bo, bo_local, bo_baseline]
+algorithm: bo_local
+
+# Main GA loop parameters
+max_fe: 100 # maximum number of function evaluations
+pop_size: 20 # population size for GA
+init_pop_size: 4 # initial population size for GA
+timeout: 60 # timeout for evaluation of a single heuristic
+
+# Main BO loop parameters
+
+n_init: 10 # number of initial random samples
+n_iters: 200 # number of iterations for BO
+num_samples: 5
+
+max_train_size: 300
+sampling_strategy: 'sobol' # [random, sobol, latin_hypercube, stratified, diversity, ucb, thompson, adaptive]
+use_sparse_gp: false
+num_inducing_points: 64
+
+# GP fitting parameters
+gp_fit_sample_size: 250
+
+# Continuation parameters
+exp_use_continue: True # whether to use continuation
+exp_continue_path: "/Users/chriswu/Github/MCTS-AHD-master/outputs/bpp_offline_aco-aco/2025-08-26_14-53-22/population_generation_62.json" # path to the continuation file
+
+lambda_value: 0.7 # the weight between train_length and gap in the objective function
+parent_sample_size: 3 # number of parents to sample for expansion in BO

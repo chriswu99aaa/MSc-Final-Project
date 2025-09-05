@@ -1,0 +1,39 @@
+# cfg/algorithm/bo.yaml
+algorithm: bo
+
+# BO 超参数
+bo:
+  # 初始采样点数量
+  n_init: 10
+
+  # BO 迭代次数（排除初始点）
+  n_iters: 20
+
+  # GP 噪声假设（observation noise）
+  noise: 1e-6
+
+  # 调用 eval 脚本的超时时间（秒）
+  eval_timeout: 300
+
+  # 每个维度的取值范围（与 sample_prompt_cfg, embed 对应）
+  # 例如：temperature ∈ [0.5,1.5], top_p ∈ [0.8,1.0]
+  bounds:
+    - [0.5, 1.5]   # temperature
+    - [0.8, 1.0]   # top_p
+
+  # 用于生成最终 prompt_text 的模板
+  # 可在 sample_prompt_cfg 中 format 出 actual prompt
+  template: >
+    "Estimate cost from state {s} to goal {g}
+     with temperature={temperature:.2f}
+     and top_p={top_p:.2f}"
+
+  # 最大训练样本数
+  max_train_size: 300
+
+  # GP拟合采样大小
+  gp_fit_sample_size: 100
+
+  # Sparse GP settings
+  use_sparse_gp: false
+  num_inducing_points: 64
